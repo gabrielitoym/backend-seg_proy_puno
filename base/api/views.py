@@ -3,15 +3,16 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import viewsets
+from rest_framework.views import APIView
 
 
 from .serializers import NoteSerializer
 from base.models import Note
-
 from base.models import Empleado
 from .serializers import EmpleadoSerializer
 from base.models import Proyecto
@@ -64,11 +65,28 @@ def getEmpleado(request):
     serializer = EmpleadoSerializer(empleado, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getProyecto(request):
+class ProyectoApiView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-    proyectos = Proyecto.objects.all()
-    serializer = ProyectoSerializer(proyectos, many=True)
-    return Response(serializer.data)  
-    
+    def get(self, request, *args, **kwargs):
+        proyectos = Proyecto.objects.all()
+        serializer = ProyectoSerializer(proyectos, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)  
+
+    def post(self, request, *args, **kwargs):
+
+        data = {
+            'Codigo_CUI': request.data.get('Codigo_CUI'), 
+            'Nombre': request.data.get('Nombre'), 
+            'Codigo_SNIP':request.data.get('Codigo_SNIP'), 
+            #'Foto_Perfil':request.data.get('Foto_Perfil'), 
+            'Fecha_Registro':request.data.get('Fecha_Registro'), 
+            'Fecha_Inicio': request.data.get('Fecha_Inicio'), 
+            'Fecha_Fin': request.data.get('Fecha_Fin'), 
+        }
+        serializer = ProyectoSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
