@@ -8,3 +8,6 @@ admin.site.register(Note)
 
 from .models import Empleado
 admin.site.register(Empleado)
+
+from .models import Proyecto
+admin.site.register(Proyecto)

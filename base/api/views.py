@@ -14,6 +14,9 @@ from base.models import Note
 
 from base.models import Empleado
 from .serializers import EmpleadoSerializer
+from base.models import Proyecto
+from .serializers import ProyectoSerializer
+
 from rest_framework.parsers import MultiPartParser, FormParser
 
 
@@ -60,3 +63,12 @@ def getEmpleado(request):
     empleado = user.empleado_set.all()
     serializer = EmpleadoSerializer(empleado, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getProyecto(request):
+
+    proyectos = Proyecto.objects.all()
+    serializer = ProyectoSerializer(proyectos, many=True)
+    return Response(serializer.data)  
+    
