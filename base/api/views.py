@@ -43,7 +43,7 @@ def getRoutes(request):
         '/api/token',
         '/api/token/refresh',
         'api/notes',
-        'api/empleado'
+        'api/empleados'
     ]
 
     return Response(routes)
@@ -80,6 +80,9 @@ class ProyectoApiView(APIView):
             'Nombre': request.data.get('Nombre'), 
             'Codigo_SNIP':request.data.get('Codigo_SNIP'), 
             #'Foto_Perfil':request.data.get('Foto_Perfil'), 
+            'tipo': request.data.get('tipo'), 
+            'estado_inversion':request.data.get('estado_inversion'),
+            'ubicacion':request.data.get('ubicacion'),
             'Fecha_Registro':request.data.get('Fecha_Registro'), 
             'Fecha_Inicio': request.data.get('Fecha_Inicio'), 
             'Fecha_Fin': request.data.get('Fecha_Fin'), 

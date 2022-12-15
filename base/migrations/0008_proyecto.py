@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('Codigo_CUI', models.CharField(help_text='Codigo CUI', max_length=7)),
                 ('Codigo_SNIP', models.CharField(help_text='Codigo SNIP', max_length=8, null=True)),
                 ('Nombre', models.CharField(help_text='Nombre Proyecto', max_length=1000, null=True)),
-                ('Foto_Perfil', models.ImageField(null=True, upload_to=base.models.upload_to)),
+                ('Foto_Perfil', models.ImageField(null=True, upload_to=base.models.upload_to_proyecto_perfil)),
                 ('Fecha_Registro', models.DateField(verbose_name='Fecha de Registro')),
                 ('Fecha_Inicio', models.DateField(verbose_name='Fecha de Inicio')),
                 ('Fecha_Fin', models.DateField(verbose_name='Fecha Fin')),

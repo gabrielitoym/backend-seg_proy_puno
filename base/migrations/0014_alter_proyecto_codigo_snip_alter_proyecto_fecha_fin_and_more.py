@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='proyecto',
             name='Foto_Perfil',
-            field=models.ImageField(blank=True, null=True, upload_to=base.models.upload_to),
+            field=models.ImageField(blank=True, null=True, upload_to=base.models.upload_to_proyecto_perfil),
         ),
         migrations.AlterField(
             model_name='proyecto',
