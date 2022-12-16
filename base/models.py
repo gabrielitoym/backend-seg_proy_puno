@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
 
@@ -84,6 +85,7 @@ class UEI(models.Model):
         verbose_name = 'Unidad Ejecutora'
         verbose_name_plural = 'Unidades Ejecutoras'
         db_table = 'UEI'
+
 class Modalidad_Ejecucion(models.Model):    
     name = models.CharField(max_length=80, help_text="Modalidad de Ejecucion", blank=False, null=False)
     def __str__(self):
@@ -91,8 +93,7 @@ class Modalidad_Ejecucion(models.Model):
     class Meta:
         verbose_name = 'Modalidad de Ejecucion'
         verbose_name_plural = 'Modalidades de Ejecucion'
-        db_table = 'Modalidad_Ejecucion'        
-
+        db_table = 'Modalidad_Ejecucion'  
 
 class Proyecto(models.Model):
     Codigo_CUI = models.CharField(max_length=7, help_text="Codigo CUI", blank=False, null=False)
@@ -131,3 +132,31 @@ class Beneficiario(models.Model):
         verbose_name = 'Modalidad de Ejecucion'
         verbose_name_plural = 'Modalidades de Ejecucion'
         db_table = 'Beneficiario' 
+
+class Componente(models.Model):  
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)  
+    Nombre = models.TextField(help_text="Componente de Inversion", blank=False, null=False)
+    Descripcion  = models.TextField(help_text="Descripcion del componente", blank=True, null=True)
+    Costo_Total = models.DecimalField(help_text="Costo total Actualizado",max_digits=9, decimal_places=2)
+    Dev_Acumulado = models.DecimalField(help_text="Devengado Acumulado",max_digits=9, decimal_places=2)
+    Avance_porcentaje = models.DecimalField(help_text="Porcentaje de avance",max_digits=3, decimal_places=2)
+    Fecha_Actualizado = models.DateTimeField(help_text="Fecha de ultima actualizacion",auto_now=False, auto_now_add=False, default=datetime.now)
+    Comentario = models.TextField(help_text="Comentario sobre el componente", blank=False, null=False)
+    def __str__(self):
+        return self.Nombre
+    class Meta:
+        verbose_name = 'Componente'
+        verbose_name_plural = 'Componentes'
+        db_table = 'Componente'   
+
+class Situacion_inversion(models.Model):  
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)
+    Descripcion  = models.TextField(help_text="Descripcion del componente", blank=True, null=True)
+    Fecha_Modificado = models.DateTimeField(help_text="Fecha de ultima actualizacion", default=datetime.now)
+    
+    def __str__(self):
+        return self.proyecto.Nombre
+    class Meta:
+        verbose_name = 'Situacion de Inversion'
+        verbose_name_plural = 'Situaciones de Inversion'
+        db_table = 'Situacion_inversion' 

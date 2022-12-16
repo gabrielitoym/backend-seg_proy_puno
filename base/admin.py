@@ -32,3 +32,9 @@ admin.site.register(Modalidad_Ejecucion)
 
 from .models import Beneficiario
 admin.site.register(Beneficiario)
+
+from .models import Componente
+admin.site.register(Componente)
+
+from .models import Situacion_inversion
+admin.site.register(Situacion_inversion)
