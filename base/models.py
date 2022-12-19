@@ -137,9 +137,9 @@ class Componente(models.Model):
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)  
     Nombre = models.TextField(help_text="Componente de Inversion", blank=False, null=False)
     Descripcion  = models.TextField(help_text="Descripcion del componente", blank=True, null=True)
-    Costo_Total = models.DecimalField(help_text="Costo total Actualizado",max_digits=9, decimal_places=2)
-    Dev_Acumulado = models.DecimalField(help_text="Devengado Acumulado",max_digits=9, decimal_places=2)
-    Avance_porcentaje = models.DecimalField(help_text="Porcentaje de avance",max_digits=3, decimal_places=2)
+    Costo_Total = models.DecimalField(help_text="Costo total Actualizado",max_digits=11, decimal_places=2)
+    Dev_Acumulado = models.DecimalField(help_text="Devengado Acumulado",max_digits=11, decimal_places=2)
+    Avance_porcentaje = models.DecimalField(help_text="Porcentaje de avance",max_digits=5, decimal_places=2)
     Fecha_Actualizado = models.DateTimeField(help_text="Fecha de ultima actualizacion",auto_now=False, auto_now_add=False, default=datetime.now)
     Comentario = models.TextField(help_text="Comentario sobre el componente", blank=False, null=False)
     def __str__(self):
@@ -159,4 +159,52 @@ class Situacion_inversion(models.Model):
     class Meta:
         verbose_name = 'Situacion de Inversion'
         verbose_name_plural = 'Situaciones de Inversion'
-        db_table = 'Situacion_inversion' 
+        db_table = 'Situacion_inversion'
+
+class PIA(models.Model):  
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)
+    Monto_programado = models.DecimalField(help_text="Monto_asignado",max_digits=11, decimal_places=2)
+    Year = models.DateTimeField(help_text="Año Asignado", default=datetime.now)
+    Monto_programado_01=models.DecimalField(help_text="Monto_asignado_enero",max_digits=11, decimal_places=2)
+    Monto_programado_02=models.DecimalField(help_text="Monto_asignado_febrero",max_digits=11, decimal_places=2)
+    Monto_programado_03=models.DecimalField(help_text="Monto_asignado_marzo",max_digits=11, decimal_places=2)
+    Monto_programado_04=models.DecimalField(help_text="Monto_asignado_abril",max_digits=11, decimal_places=2)
+    Monto_programado_05=models.DecimalField(help_text="Monto_asignado_mayo",max_digits=11, decimal_places=2)
+    Monto_programado_06=models.DecimalField(help_text="Monto_asignado_junio",max_digits=11, decimal_places=2)
+    Monto_programado_07=models.DecimalField(help_text="Monto_asignado_julio",max_digits=11, decimal_places=2)
+    Monto_programado_08=models.DecimalField(help_text="Monto_asignado_agosto",max_digits=11, decimal_places=2)
+    Monto_programado_09=models.DecimalField(help_text="Monto_asignado_setiembre",max_digits=11, decimal_places=2)
+    Monto_programado_10=models.DecimalField(help_text="Monto_asignado_octubre",max_digits=11, decimal_places=2)
+    Monto_programado_11=models.DecimalField(help_text="Monto_asignado_noviembre",max_digits=11, decimal_places=2)
+    Monto_programado_12=models.DecimalField(help_text="Monto_asignado_diciembre",max_digits=11, decimal_places=2)
+    
+    def __str__(self):
+        return self.proyecto.Nombre + " "+self.Year.strftime('%Y')
+    class Meta:
+        verbose_name = 'PIA'
+        verbose_name_plural = 'PIAs'
+        db_table = 'PIA'  
+
+class PIM(models.Model):  
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)
+    Monto_actualizado = models.DecimalField(help_text="Monto_actualizado",max_digits=11, decimal_places=2)
+    Year = models.DateTimeField(help_text="Año Asignado", default=datetime.now)
+    Monto_actualizado_01=models.DecimalField(help_text="Monto_actualizado_enero",max_digits=11, decimal_places=2)
+    Monto_actualizado_02=models.DecimalField(help_text="Monto_actualizado_febrero",max_digits=11, decimal_places=2)
+    Monto_actualizado_03=models.DecimalField(help_text="Monto_actualizado_marzo",max_digits=11, decimal_places=2)
+    Monto_actualizado_04=models.DecimalField(help_text="Monto_actualizado_abril",max_digits=11, decimal_places=2)
+    Monto_actualizado_05=models.DecimalField(help_text="Monto_actualizado_mayo",max_digits=11, decimal_places=2)
+    Monto_actualizado_06=models.DecimalField(help_text="Monto_actualizado_junio",max_digits=11, decimal_places=2)
+    Monto_actualizado_07=models.DecimalField(help_text="Monto_actualizado_julio",max_digits=11, decimal_places=2)
+    Monto_actualizado_08=models.DecimalField(help_text="Monto_actualizado_agosto",max_digits=11, decimal_places=2)
+    Monto_actualizado_09=models.DecimalField(help_text="Monto_actualizado_setiembre",max_digits=11, decimal_places=2)
+    Monto_actualizado_10=models.DecimalField(help_text="Monto_actualizado_octubre",max_digits=11, decimal_places=2)
+    Monto_actualizado_11=models.DecimalField(help_text="Monto_actualizado_noviembre",max_digits=11, decimal_places=2)
+    Monto_actualizado_12=models.DecimalField(help_text="Monto_actualizado_diciembre",max_digits=11, decimal_places=2)
+    
+    def __str__(self):
+        return self.proyecto.Nombre + " "+self.Year.strftime('%Y')
+    class Meta:
+        verbose_name = 'PIM'
+        verbose_name_plural = 'PIMs'
+        db_table = 'PIM'  

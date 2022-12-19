@@ -38,3 +38,9 @@ admin.site.register(Componente)
 
 from .models import Situacion_inversion
 admin.site.register(Situacion_inversion)
+
+from .models import PIA
+admin.site.register(PIA)
+
+from .models import PIM
+admin.site.register(PIM)
