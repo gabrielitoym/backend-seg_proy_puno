@@ -1,11 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
-
-from .models import Note
-admin.site.register(Note)
-
-
 from .models import Empleado
 admin.site.register(Empleado)
 
@@ -44,3 +38,12 @@ admin.site.register(PIA)
 
 from .models import PIM
 admin.site.register(PIM)
+
+from .models import Devengado
+admin.site.register(Devengado)
+
+from .models import Certificacion
+admin.site.register(Certificacion)
+
+from .models import Costo_general
+admin.site.register(Costo_general)

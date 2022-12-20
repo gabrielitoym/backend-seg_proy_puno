@@ -115,7 +115,7 @@ class Proyecto(models.Model):
     #id_Unidad_Ejecutora = fk
     #OPMI = fk
     def __str__(self):
-        return self.Codigo_CUI
+        return self.Nombre
     class Meta:
         verbose_name = 'Proyecto'
         verbose_name_plural = 'Proyectos'
@@ -129,21 +129,23 @@ class Beneficiario(models.Model):
     def __str__(self):
         return self.Descripcion
     class Meta:
-        verbose_name = 'Modalidad de Ejecucion'
-        verbose_name_plural = 'Modalidades de Ejecucion'
+        verbose_name = 'beneficiario'
+        verbose_name_plural = 'beneficiarios'
         db_table = 'Beneficiario' 
 
 class Componente(models.Model):  
+    #Proyecto fk 
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)  
     Nombre = models.TextField(help_text="Componente de Inversion", blank=False, null=False)
-    Descripcion  = models.TextField(help_text="Descripcion del componente", blank=True, null=True)
-    Costo_Total = models.DecimalField(help_text="Costo total Actualizado",max_digits=11, decimal_places=2)
-    Dev_Acumulado = models.DecimalField(help_text="Devengado Acumulado",max_digits=11, decimal_places=2)
-    Avance_porcentaje = models.DecimalField(help_text="Porcentaje de avance",max_digits=5, decimal_places=2)
-    Fecha_Actualizado = models.DateTimeField(help_text="Fecha de ultima actualizacion",auto_now=False, auto_now_add=False, default=datetime.now)
-    Comentario = models.TextField(help_text="Comentario sobre el componente", blank=False, null=False)
+    Componente_Fisico = models.BooleanField(default=False)
+    #Descripcion  = models.TextField(help_text="Descripcion del componente", blank=True, null=True)
+    #Costo_Total = models.DecimalField(help_text="Costo total Actualizado",max_digits=11, decimal_places=2)
+    #Devengado_Acumulado = models.DecimalField(help_text="Devengado Acumulado",max_digits=11, decimal_places=2)
+    #Avance_porcentaje = models.DecimalField(help_text="Porcentaje de avance",max_digits=5, decimal_places=2)
+    #Fecha_Actualizado = models.DateTimeField(help_text="Fecha de ultima actualizacion",auto_now=False, auto_now_add=False, default=datetime.now)
+    #Comentario = models.TextField(help_text="Comentario sobre el componente", blank=False, null=False)
     def __str__(self):
-        return self.Nombre
+        return self.proyecto.Codigo_CUI+" "+self.Nombre
     class Meta:
         verbose_name = 'Componente'
         verbose_name_plural = 'Componentes'
@@ -164,7 +166,7 @@ class Situacion_inversion(models.Model):
 class PIA(models.Model):  
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)
     Monto_programado = models.DecimalField(help_text="Monto_asignado",max_digits=11, decimal_places=2)
-    Year = models.DateTimeField(help_text="Año Asignado", default=datetime.now)
+    Year = models.CharField(max_length=4, help_text="Año asignado", blank=False, null=False)
     Monto_programado_01=models.DecimalField(help_text="Monto_asignado_enero",max_digits=11, decimal_places=2)
     Monto_programado_02=models.DecimalField(help_text="Monto_asignado_febrero",max_digits=11, decimal_places=2)
     Monto_programado_03=models.DecimalField(help_text="Monto_asignado_marzo",max_digits=11, decimal_places=2)
@@ -179,7 +181,7 @@ class PIA(models.Model):
     Monto_programado_12=models.DecimalField(help_text="Monto_asignado_diciembre",max_digits=11, decimal_places=2)
     
     def __str__(self):
-        return self.proyecto.Nombre + " "+self.Year.strftime('%Y')
+        return self.proyecto.Nombre + " "+self.Year
     class Meta:
         verbose_name = 'PIA'
         verbose_name_plural = 'PIAs'
@@ -188,7 +190,7 @@ class PIA(models.Model):
 class PIM(models.Model):  
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)
     Monto_actualizado = models.DecimalField(help_text="Monto_actualizado",max_digits=11, decimal_places=2)
-    Year = models.DateTimeField(help_text="Año Asignado", default=datetime.now)
+    Year = models.CharField(max_length=4, help_text="Año asignado", blank=False, null=False)
     Monto_actualizado_01=models.DecimalField(help_text="Monto_actualizado_enero",max_digits=11, decimal_places=2)
     Monto_actualizado_02=models.DecimalField(help_text="Monto_actualizado_febrero",max_digits=11, decimal_places=2)
     Monto_actualizado_03=models.DecimalField(help_text="Monto_actualizado_marzo",max_digits=11, decimal_places=2)
@@ -203,8 +205,70 @@ class PIM(models.Model):
     Monto_actualizado_12=models.DecimalField(help_text="Monto_actualizado_diciembre",max_digits=11, decimal_places=2)
     
     def __str__(self):
-        return self.proyecto.Nombre + " "+self.Year.strftime('%Y')
+        return self.proyecto.Nombre + " "+self.Year
     class Meta:
         verbose_name = 'PIM'
         verbose_name_plural = 'PIMs'
         db_table = 'PIM'  
+
+class Devengado(models.Model):  
+    PIM = models.ForeignKey(PIM, on_delete=models.CASCADE,null = False,blank=False)
+    dev_Anual = models.DecimalField(help_text="Monto_actualizado",max_digits=11, decimal_places=2)
+    Year = models.CharField(max_length=4, help_text="Año asignado", blank=False, null=False)
+    Monto_devengado_01=models.DecimalField(help_text="Monto_devengado_enero",max_digits=11, decimal_places=2)
+    Monto_devengado_02=models.DecimalField(help_text="Monto_devengado_febrero",max_digits=11, decimal_places=2)
+    Monto_devengado_03=models.DecimalField(help_text="Monto_devengado_marzo",max_digits=11, decimal_places=2)
+    Monto_devengado_04=models.DecimalField(help_text="Monto_devengado_abril",max_digits=11, decimal_places=2)
+    Monto_devengado_05=models.DecimalField(help_text="Monto_devengado_mayo",max_digits=11, decimal_places=2)
+    Monto_devengado_06=models.DecimalField(help_text="Monto_devengado_junio",max_digits=11, decimal_places=2)
+    Monto_devengado_07=models.DecimalField(help_text="Monto_devengado_julio",max_digits=11, decimal_places=2)
+    Monto_devengado_08=models.DecimalField(help_text="Monto_devengado_agosto",max_digits=11, decimal_places=2)
+    Monto_devengado_09=models.DecimalField(help_text="Monto_devengado_setiembre",max_digits=11, decimal_places=2)
+    Monto_devengado_10=models.DecimalField(help_text="Monto_devengado_octubre",max_digits=11, decimal_places=2)
+    Monto_devengado_11=models.DecimalField(help_text="Monto_devengado_noviembre",max_digits=11, decimal_places=2)
+    Monto_devengado_12=models.DecimalField(help_text="Monto_devengado_diciembre",max_digits=11, decimal_places=2)
+    
+    def __str__(self):
+        return self.proyecto.Nombre + " "+self.Year
+    class Meta:
+        verbose_name = 'Devengado'
+        verbose_name_plural = 'Devengados'
+        db_table = 'devengado'  
+
+class Certificacion(models.Model):  
+    PIM = models.ForeignKey(PIM, on_delete=models.CASCADE,null = False,blank=False)
+    cert_Anual = models.DecimalField(help_text="Monto_actualizado",max_digits=11, decimal_places=2)
+    Year = models.CharField(max_length=4, help_text="Año asignado", blank=False, null=False)
+    Monto_certificado_01=models.DecimalField(help_text="Monto_certificado_enero",max_digits=11, decimal_places=2)
+    Monto_certificado_02=models.DecimalField(help_text="Monto_certificado_febrero",max_digits=11, decimal_places=2)
+    Monto_certificado_03=models.DecimalField(help_text="Monto_certificado_marzo",max_digits=11, decimal_places=2)
+    Monto_certificado_04=models.DecimalField(help_text="Monto_certificado_abril",max_digits=11, decimal_places=2)
+    Monto_certificado_05=models.DecimalField(help_text="Monto_certificado_mayo",max_digits=11, decimal_places=2)
+    Monto_certificado_06=models.DecimalField(help_text="Monto_certificado_junio",max_digits=11, decimal_places=2)
+    Monto_certificado_07=models.DecimalField(help_text="Monto_certificado_julio",max_digits=11, decimal_places=2)
+    Monto_certificado_08=models.DecimalField(help_text="Monto_certificado_agosto",max_digits=11, decimal_places=2)
+    Monto_certificado_09=models.DecimalField(help_text="Monto_certificado_setiembre",max_digits=11, decimal_places=2)
+    Monto_certificado_10=models.DecimalField(help_text="Monto_certificado_octubre",max_digits=11, decimal_places=2)
+    Monto_certificado_11=models.DecimalField(help_text="Monto_certificado_noviembre",max_digits=11, decimal_places=2)
+    Monto_certificado_12=models.DecimalField(help_text="Monto_certificado_diciembre",max_digits=11, decimal_places=2)
+    
+    def __str__(self):
+        return self.proyecto.Nombre + " "+self.Year
+    class Meta:
+        verbose_name = 'Certificación'
+        verbose_name_plural = 'Certificaciones'
+        db_table = 'certificacion'  
+
+class Costo_general(models.Model):  
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,null = False,blank=False)
+    Costo_total = models.DecimalField(help_text="Monto_actualizado",max_digits=11, decimal_places=2)
+    Devengado_acumulado = models.DecimalField(help_text="Devengado_acumulado",max_digits=11, decimal_places=2)
+    certificacion_Acumulada = models.DecimalField(help_text="certificacion_acumulada",max_digits=11, decimal_places=2)
+    Last_Year = models.CharField(max_length=4, help_text="Ultimo Año actualizado", blank=False, null=False)
+
+    def __str__(self):
+        return self.proyecto.Nombre
+    class Meta:
+        verbose_name = 'Costo general'
+        verbose_name_plural = 'Costos generales'
+        db_table = 'costo_general'  
