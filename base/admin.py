@@ -47,3 +47,19 @@ admin.site.register(Certificacion)
 
 from .models import Costo_general
 admin.site.register(Costo_general)
+
+#ACTIVIDAD 
+from .models import Actividad
+admin.site.register(Actividad)
+
+#EVENTO
+from .models import Evento
+admin.site.register(Evento)
+
+#PERMISOS
+from .models import Permiso
+admin.site.register(Permiso)
+
+#USER
+from .models import User_Permiso
+admin.site.register(User_Permiso)

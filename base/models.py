@@ -9,6 +9,9 @@ class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     body = models.TextField()
 
+def upload_to_evidencia(instance, filename):
+    return 'evidencias/{filename}'.format(filename=filename)
+
 def upload_to_employed_perfil(instance, filename):
     return 'employed/{filename}'.format(filename=filename)
 
@@ -79,6 +82,9 @@ class ciudad(models.Model):
 
 class UEI(models.Model):    
     Nombre = models.CharField(max_length=80, help_text="Unidad Ejecutora", blank=False, null=False)
+    Opmi = models.CharField(max_length=150, help_text="OPMI", null=True)
+    Unidad_Formuladora = models.CharField(max_length=150, help_text="Unidad Formuladora", null=True)
+    Unidad_Ejecutora_de_Inversiones = models.CharField(max_length=150, help_text="Unidad Ejecutora de Inversiones(UEI)", null=True) 
     def __str__(self):
         return self.Nombre
     class Meta:
@@ -96,7 +102,7 @@ class Modalidad_Ejecucion(models.Model):
         db_table = 'Modalidad_Ejecucion'  
 
 class Proyecto(models.Model):
-    Codigo_CUI = models.CharField(max_length=7, help_text="Codigo CUI", blank=False, null=False)
+    Codigo_CUI = models.CharField(max_length=7, help_text="Codigo CUI", unique=True, blank=False, null=False)
     Codigo_SNIP = models.CharField(max_length=6, help_text="Codigo SNIP",blank=True,null=True)
     Nombre = models.TextField( help_text="Nombre Proyecto", null=False)
     Foto_Perfil = models.ImageField(upload_to=upload_to_proyecto_perfil, blank=True, null=True)
@@ -272,3 +278,62 @@ class Costo_general(models.Model):
         verbose_name = 'Costo general'
         verbose_name_plural = 'Costos generales'
         db_table = 'costo_general'  
+#Actividad
+class Actividad(models.Model):
+    Nombre = models.CharField(max_length=500, help_text="Evento ", null=False)
+    Discripción = models.TextField(help_text="Discripción", null=False)
+    Fecha_Evento = models.DateField(verbose_name="Fecha de Evento",blank=True,null=True)
+    #Proyecto fk
+    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,blank=True, null=True)
+    def __str__(self):
+        return self.proyecto.Nombre+" - "+self.Nombre
+    class Meta:
+        verbose_name = 'Actividad'
+        verbose_name_plural = 'Actividades'
+        db_table = 'actividad' 
+
+#Evento
+class Evento(models.Model):
+    #Proyecto fk
+    actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE,blank=True, null=True)
+    Archivo = models.FileField(upload_to=upload_to_evidencia, blank=True, null=True)
+    Url = models.URLField(max_length=500, help_text="Link", null=True, blank=True)
+    Img = models.BooleanField(default=False)
+    Video = models.BooleanField(default=False)
+    def __str__(self):
+        return self.evento.Nombre
+    class Meta:
+        verbose_name = 'Evento'
+        verbose_name_plural = 'Eventos'  
+        db_table = 'Evento' 
+
+#PERMISO
+class Permiso(models.Model):
+    Nombre = models.CharField(max_length=500, help_text="Evento ", null=False)
+    Permiso_Activo = models.BooleanField(default=True)
+    #unidad_Ejecutor fk 
+    Permiso_unidad_ejecutora = models.ForeignKey(UEI, on_delete=models.CASCADE,blank=True, null=True)
+    #Proyecto FK
+    Permiso_proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE,blank=True, null=True)
+    def __str__(self):
+        return self.Nombre
+    class Meta:
+        verbose_name = 'Permiso'
+        verbose_name_plural = 'Permisos'
+        db_table = 'Permiso' 
+
+
+#USER
+class User_Permiso(models.Model):
+    #user fk
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
+    Fecha_Inicio = models.DateField(verbose_name="Fecha de Inicio",blank=True,null=True)
+    User_Permiso_Activo = models.BooleanField(default=True)
+    #Permiso fk
+    permiso = models.ForeignKey(Permiso, on_delete=models.CASCADE,blank=True, null=True)
+    def __str__(self):
+        return self.usuario.username +" "+ self.permiso.Nombre
+    class Meta:
+        verbose_name = 'User_Permiso'
+        verbose_name_plural = 'User Permisos'
+        db_table = 'user-permiso' 
